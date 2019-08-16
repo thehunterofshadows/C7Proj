@@ -1,0 +1,28 @@
+---
+title: "Analysis on Transmission Type"
+author: "Justin Pizzino"
+date: "8/15/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+First load the data, then convert the incorrect data to factors, such as am
+
+```{r setup}
+data(mtcars)
+mtcars$am<-as.factor(mtcars$am)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

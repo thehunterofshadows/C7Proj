@@ -1,0 +1,8 @@
+#Thoughts
+Is an automatic or manual better for MPG
+Quantify the MPG difference between automatic and manual trans
+
+#Steps
+1. Need to show how you determine which variables are signifiagnt and which not.
+2. Also show which items are corrliated and thus left out
+3. Show comparings to different models with ANOVA to show which are signifgant
