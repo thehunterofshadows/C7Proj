@@ -7,22 +7,37 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(stats)
+library(ggplot2)
+library(car)
+library(corrplot)
 ```
 
 ## R Markdown
 First load the data, then convert the incorrect data to factors, such as am
 
-```{r setup}
+```{r data}
 data(mtcars)
-mtcars$am<-as.factor(mtcars$am)
+#which items should be factors?  
+mtcars<-mtcars
+mtcars$am<-as.logical(mtcars$am)
+#V2mtcars$cyl<-as.factor(V2mtcars$cyl)
+#mtcars$cyl.4<-as.logical(FALSE)  #There is a better way to do this
+#mtcars$cyl.4[cyl=4]<-as.logical(TRUE)
+mtcars$cyl.6<-as.logical(FALSE)  #There is a better way to do this
+mtcars$cyl.6[ which(mtcars$cyl==6)]<-as.logical(TRUE)
+mtcars$cyl.8<-as.logical(FALSE)  #There is a better way to do this
+mtcars$cyl.8[ which(mtcars$cyl==8)]<-as.logical(TRUE)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+Easy way to start is to do a direct compare of mpg to the transmission type.  From here it woudl appear that a manual tranmisssion would add about 7.2 MPG.  But we know there is more to it than that.
+```{r start}
+summary(lm(mpg~am,mtcars))$coef
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+We know we should include other data, but need to determine which data points.  So I compraed the corrlation of each data point to it self.
+```{r cor}
+corrplot(cor(mtcars),method="square")
+```
