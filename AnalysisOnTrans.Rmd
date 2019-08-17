@@ -14,7 +14,7 @@ library(corrplot)
 ```
 
 ## R Markdown
-First load the data, then convert the incorrect data to factors, such as am
+First load the data, then convert the Transmission type (am) to Boolean, and split out cylinder into dummy variables.
 
 ```{r data}
 data(mtcars)
@@ -31,13 +31,38 @@ mtcars$cyl.8[ which(mtcars$cyl==8)]<-as.logical(TRUE)
 ```
 
 
-Easy way to start is to do a direct compare of mpg to the transmission type.  From here it woudl appear that a manual tranmisssion would add about 7.2 MPG.  But we know there is more to it than that.
-```{r start}
-summary(lm(mpg~am,mtcars))$coef
+Easy way to start is to do a direct compare of mpg to the transmission type.  From here it would appear that a manual transmission would add about 7.2 MPG.  We can see below that transmission is statistically significant with low p value, but it's adjusted r squared value is low, at only .338 meaning only 33.8% of the data is explained by this model.
+So let's add more data points in to create a stronger model.
+```{r mpgToam, fig.width=2, fig.height=2}
+summary(lm(mpg~am,mtcars))
 ```
 
 
-We know we should include other data, but need to determine which data points.  So I compraed the corrlation of each data point to it self.
-```{r cor}
+We know we should include other data, but need to determine which data points.  So I compared the correlation of each data point to it self.  
+Here we can see that many other values that are correlated to MPG.  We need to factors those in to determine transmissions impact.
+Weight, displacement, number of cyl, and engine shape (vs) all are very corralated to MPG, but also to each other.
+```{r cor, fig.width=3, fig.height=3}
 corrplot(cor(mtcars),method="square")
 ```
+
+As weight has the highest correlation to MPG I choose that value to add to the model.
+```{r addWt, fig.width=7,fig.height=7}
+summary(lm(mpg~am+wt,mtcars))
+```
+Based on this model it would appear a manual transmission would reduce MPG by 0.02.  Also again, looking at the coeficent, each ton of weight decreases MPG by about 5.35.
+
+Now that seems strange, our rss value went up, which is great, showing greater correlation between our model and observed data.  But the statistical significant of transmission type went down.  To understand why, created a plot of weight to mpg, with color coding for the two trans types.
+
+```{r plot, fig.width=11, fig.height=5}
+ggplot(mtcars, aes(wt, mpg))+
+  geom_point(aes(col=as.factor(am)),size=5)+
+  labs(title = "MPG to Weight with Trans",
+       x="Weight in Tons",
+       y="Miles per Gallon")+
+  scale_colour_discrete(name="Trans",
+                        labels=c("Manual","Auto"))
+```
+With this plot we can now see that while MPG does go down with manual transmission, we also see that weight goes up, and appears to be the larger factor in impacting MPG.
+
+## Result
+Based on the analysis done I would say it's possible an automatic transmission is better for MPG, by 0.02 MPG.  But based on the results, I would say, there is not enough data to determine the impact of transmission on MPG.  The p value is too low, and a majority of the change can be explained away by weight of the vehicle.

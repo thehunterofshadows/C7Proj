@@ -53,6 +53,16 @@ cylPlot<-ggplot(mtcars, aes(as.factor(cyl), mpg))+
        title="Plot")+
   scale_colour_discrete(name="Cylinders")
 
+# manual is also in smaller cars.
+g2<-ggplot(mtcars, aes(wt, mpg))+
+  geom_point(aes(col=as.factor(am)),size=4)+
+  labs(subtitle = "MPG to Weight with Trans",
+       x="Weight in Tons",
+       y="Miles per Gallon",
+       title="Plot")+
+  scale_colour_discrete(name="Trans",
+                        labels=c("Manual","Auto"))
+
   
 #vif fit of each variable
 v<-vif(fitAll)
