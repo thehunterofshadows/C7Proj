@@ -1,3 +1,11 @@
+#Sports cars
+is it possible that sports cars have an impact on mpg?
+
+
+
+
+
+
 #Thoughts
 Is an automatic or manual better for MPG
 Quantify the MPG difference between automatic and manual trans

@@ -55,7 +55,7 @@ cylPlot<-ggplot(mtcars, aes(as.factor(cyl), mpg))+
 
 # manual is also in smaller cars.
 g2<-ggplot(mtcars, aes(wt, mpg))+
-  geom_point(aes(col=as.factor(am)),size=4)+
+  geom_point(aes(col=as.factor(am)),size=5)+
   labs(subtitle = "MPG to Weight with Trans",
        x="Weight in Tons",
        y="Miles per Gallon",
@@ -63,6 +63,40 @@ g2<-ggplot(mtcars, aes(wt, mpg))+
   scale_colour_discrete(name="Trans",
                         labels=c("Manual","Auto"))
 
+#Plot the residuals
+## for mpg to wt - not realy what you were supose to do
+res=ggplot(data.frame(x=mtcars$wt, y=resid(lm(mpg~wt,mtcars))),
+           aes(x=x,y=y))+
+  geom_hline(yintercept = 0,size=2)+
+  geom_point(size=7, colour="black", alpha=0.4)+
+  geom_point(size=5,colour="red",alpha=0.4)+
+  xlab("Weight")+ylab("Residual")
+##add in colors for trans
+res2=ggplot(data.frame(am=mtcars$am,x=mtcars$wt, y=resid(lm(mpg~wt,mtcars))),
+           aes(x=x,y=y))+
+  geom_hline(yintercept = 0,size=2)+
+  geom_point(size=7, colour="black", alpha=0.4)+
+  geom_point(size=5,aes(col=as.factor(am)),alpha=0.4)+
+  xlab("Weight")+ylab("Residual")
+
+resMPG2AM=ggplot(data.frame(x=as.factor(mtcars$am), y=resid(lm(mpg~as.factor(am),mtcars))),
+           aes(x=x,y=y))+
+  geom_hline(yintercept = 0,size=2)+
+  geom_point(size=7, colour="black", alpha=0.4)+
+  geom_point(size=5,colour="red",alpha=0.4)+
+  xlab("Trans")+ylab("Residual")
+
+res.am.wt=ggplot(data.frame(am=as.factor(mtcars$am),x=as.factor(mtcars$wt), y=resid(lm(mpg~wt+as.factor(am),mtcars))),
+                 aes(x=x,y=y))+
+  geom_hline(yintercept = 0,size=2)+
+  geom_point(size=7, colour="black", alpha=0.4)+
+  geom_point(size=5,alpha=0.4,aes(col=am))+
+  xlab("Weight in Tons")+ylab("Residual")
+
+#Sports car look
+#View(subset(mtcars, wt>=3 & wt<=4))
+mtcars$disp2wt=(mtcars$disp/mtcars$wt)
+#View(mtcars[order(disp)])
   
 #vif fit of each variable
 v<-vif(fitAll)
